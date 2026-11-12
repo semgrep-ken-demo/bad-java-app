@@ -58,6 +58,12 @@ public class DataBaseServer {
             HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         List<XMLMessage> resp = new ArrayList<XMLMessage>();
+
+        if (request.getUserPrincipal() == null) {
+            resp.add(new XMLMessage("Unauthorized: authentication required."));
+            return new ResponseEntity<List<XMLMessage>>(resp, HttpStatus.UNAUTHORIZED);
+        }
+
         String sql = "SELECT * from USERS";
         try {
             java.sql.Connection connection =
